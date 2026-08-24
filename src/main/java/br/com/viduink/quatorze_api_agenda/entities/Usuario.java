@@ -28,5 +28,6 @@ public class Usuario {
     @Column(name = "datahoracriacao", nullable = false)
     private LocalDateTime dataHoraCriacao;
 
+    @OneToMany(mappedBy = "usuario")
     private List<Tarefa> tarefas;
 }

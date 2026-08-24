@@ -18,6 +18,6 @@ public class Categoria {
     @Column(name = "nome", length = 50, nullable = false, unique = true)
     private String nome;
 
-
+    @OneToMany(mappedBy = "categoria")
     private List<Tarefa> tarefas;
 }
