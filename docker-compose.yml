@@ -1,0 +1,74 @@
+services:
+
+  # Serviço do banco de dados MySQL
+  mysql:
+    image: mysql:8.0
+    container_name: api-agenda-mysql
+    restart: always
+
+    environment:
+      MYSQL_DATABASE: bd-agenda
+      MYSQL_USER: vidu
+      MYSQL_PASSWORD: vidu
+      MYSQL_ROOT_PASSWORD: vidu
+
+    ports:
+      - "3308:3306"
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+    networks:
+      - api-agenda-network
+
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "vidu", "-pvidu"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+
+  # Serviço de gerenciamento do banco de dados
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: api-agenda-phpmyadmin
+    restart: unless-stopped
+
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: vidu
+      PMA_PASSWORD: vidu
+
+    ports:
+      - "5054:80"
+
+    volumes:
+      - phpmyadmin_data:/sessions
+
+    networks:
+      - api-agenda-network
+
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost/ || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+
+# Volumes persistentes dos containers
+volumes:
+  mysql_data:
+  phpmyadmin_data:
+
+
+# Rede compartilhada entre os serviços
+networks:
+  api-agenda-network:
+    driver: bridge
