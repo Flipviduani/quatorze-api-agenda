@@ -16,7 +16,7 @@ public record CriarUsuarioRequest(
         String email,
 
         @Pattern(
-                regexp = "",
+                regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
                 message = "A senha deve ter pelo menos uma letra minúscula, maiúscula, número e caractere especial, " +
                 "assim como no mínimo 8 caractereres."
         )
