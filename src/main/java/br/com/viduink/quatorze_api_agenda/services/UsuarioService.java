@@ -3,6 +3,7 @@ package br.com.viduink.quatorze_api_agenda.services;
 import br.com.viduink.quatorze_api_agenda.dtos.CriarUsuarioRequest;
 import br.com.viduink.quatorze_api_agenda.dtos.CriarUsuarioResponse;
 import br.com.viduink.quatorze_api_agenda.entities.Usuario;
+import br.com.viduink.quatorze_api_agenda.exceptions.EmailJaCadastradoException;
 import br.com.viduink.quatorze_api_agenda.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,10 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
 
     public CriarUsuarioResponse criarUsuario(CriarUsuarioRequest request) throws Exception {
+
+        if(usuarioRepository.findByEmail(request.email()) != null){
+            throw new EmailJaCadastradoException("E-mail informado já cadastrado.");
+        }
 
         var usuario = new Usuario();
 
