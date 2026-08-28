@@ -2,6 +2,7 @@ package br.com.viduink.quatorze_api_agenda.controllers;
 
 import br.com.viduink.quatorze_api_agenda.dtos.CriarUsuarioRequest;
 import br.com.viduink.quatorze_api_agenda.entities.Usuario;
+import br.com.viduink.quatorze_api_agenda.exceptions.EmailJaCadastradoException;
 import br.com.viduink.quatorze_api_agenda.services.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +22,12 @@ public class UsuarioController {
     @PostMapping("criar")
     public ResponseEntity<?> criar(@RequestBody @Valid CriarUsuarioRequest request) {
 
-        try{
-
+        try {
             var response = usuarioService.criarUsuario(request);
             return ResponseEntity.status(201).body(response);
+
+        } catch (EmailJaCadastradoException e) {
+            return ResponseEntity.status(409).body(e.getMessage());
 
         } catch (Exception e) {
             return ResponseEntity.status(500).body(e.getMessage());
