@@ -6,13 +6,12 @@ import jakarta.validation.constraints.Size;
 
 public record AutenticarUsuarioRequest(
 
-        @Email(message = "Informe um endereço de e-mail válido.")
-        @NotEmpty(message = "O e-mail de acesso é obrigatório.")
+        @Email(message = "Informe um endereço de email válido.")
+        @NotEmpty(message = "O email de acesso é obrigatório.")
         String email,
 
-        @Size(message = "Informe uma senha com pelo menos 8 caracteres.")
+        @Size(min = 8, message = "Informe a senha com pelo menos 8 caracteres.")
         @NotEmpty(message = "A senha de acesso é obrigatória.")
         String senha
-
 ) {
 }
